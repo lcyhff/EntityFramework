@@ -147,16 +147,12 @@ namespace Microsoft.Data.Entity.Query
                   + new ExpressionStringBuilder()
                       .Build(query);
 
-            var compiledQuery
-                = _memoryCache.GetOrSet(
-                    cacheKey,
-                    Tuple.Create(parameterizedQuery, dataStore),
-                    c =>
-                        {
-                            var tuple = (Tuple<Expression, IDataStore>)c.State;
-
-                            return compiler(tuple.Item1, tuple.Item2);
-                        });
+            CompiledQuery compiledQuery;
+            if(!_memoryCache.TryGetValue(cacheKey, out compiledQuery))
+            {
+                compiledQuery = compiler(parameterizedQuery, dataStore);
+                _memoryCache.Set(cacheKey, compiledQuery);
+            }
 
             return compiledQuery;
         }
