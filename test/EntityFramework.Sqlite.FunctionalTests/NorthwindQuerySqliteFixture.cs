@@ -38,7 +38,12 @@ namespace Microsoft.Data.Entity.Sqlite.FunctionalTests
                 .MinimumLevel = LogLevel.Debug;
         }
 
-        public override NorthwindContext CreateContext() => new SqliteNorthwindContext(_serviceProvider, _options);
+        public override NorthwindContext CreateContext()
+        {
+            var context = new SqliteNorthwindContext(_serviceProvider, _options);
+            context.ChangeTracker.AutoDetectChangesEnabled = false;
+            return context;
+        }
 
         public void Dispose() => _testStore.Dispose();
     }

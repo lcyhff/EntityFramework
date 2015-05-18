@@ -73,6 +73,7 @@
   <ItemGroup>
     <Compile Include="AsNoTrackingSqliteTest.cs" />
     <Compile Include="AsyncFromSqlQuerySqliteTest.cs" />
+    <Compile Include="AsyncQuerySqliteTest.cs" />
     <Compile Include="BuiltInDataTypesSqliteFixture.cs" />
     <Compile Include="BuiltInDataTypesSqliteTest.cs" />
     <Compile Include="ChangeTrackingSqliteTest.cs" />
@@ -84,6 +85,8 @@
     <Compile Include="GearsOfWarQuerySqliteTest.cs" />
     <Compile Include="IncludeAsyncSqliteTest.cs" />
     <Compile Include="IncludeSqliteTest.cs" />
+    <Compile Include="InheritanceSqliteFixture.cs" />
+    <Compile Include="InheritanceSqliteTest.cs" />
     <Compile Include="MappingQuerySqliteFixture.cs" />
     <Compile Include="MappingQuerySqliteTest.cs" />
     <Compile Include="NorthwindQuerySqliteFixture.cs" />
