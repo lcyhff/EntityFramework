@@ -30,6 +30,8 @@ namespace Microsoft.Data.Entity.Query
     {
         public const string CompiledQueryParameterPrefix = "__";
 
+        private static readonly object _compiledQueryLockObject = new object();
+
         private class CompiledQuery
         {
             public Type ResultItemType;
@@ -148,10 +150,13 @@ namespace Microsoft.Data.Entity.Query
                       .Build(query);
 
             CompiledQuery compiledQuery;
-            if(!_memoryCache.TryGetValue(cacheKey, out compiledQuery))
+            lock (_compiledQueryLockObject)
             {
-                compiledQuery = compiler(parameterizedQuery, dataStore);
-                _memoryCache.Set(cacheKey, compiledQuery);
+                if (!_memoryCache.TryGetValue(cacheKey, out compiledQuery))
+                {
+                    compiledQuery = compiler(parameterizedQuery, dataStore);
+                    _memoryCache.Set(cacheKey, compiledQuery);
+                }
             }
 
             return compiledQuery;
