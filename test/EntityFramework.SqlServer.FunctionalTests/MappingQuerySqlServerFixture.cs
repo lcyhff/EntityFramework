@@ -43,6 +43,8 @@ namespace Microsoft.Data.Entity.SqlServer.FunctionalTests
             _testDatabase.Dispose();
         }
 
+        protected override string DatabaseSchema { get; } = "dbo";
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<MappingQueryTestBase.MappedCustomer>(e =>

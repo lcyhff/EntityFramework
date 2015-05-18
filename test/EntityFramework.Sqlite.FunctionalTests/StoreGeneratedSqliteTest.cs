@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved.
+﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -7,7 +7,6 @@ using Microsoft.Framework.DependencyInjection;
 
 namespace Microsoft.Data.Entity.Sqlite.FunctionalTests
 {
-    // TODO: 12 failed
     public class StoreGeneratedSqliteTest
         : StoreGeneratedTestBase<SqliteTestStore, StoreGeneratedSqliteTest.StoreGeneratedSqliteFixture>
     {
@@ -35,16 +34,16 @@ namespace Microsoft.Data.Entity.Sqlite.FunctionalTests
             public override SqliteTestStore CreateTestStore()
             {
                 return SqliteTestStore.GetOrCreateShared(DatabaseName, () =>
-                {
-                    var optionsBuilder = new DbContextOptionsBuilder();
-                    optionsBuilder.UseSqlite(SqliteTestStore.CreateConnectionString(DatabaseName));
-
-                    using (var context = new StoreGeneratedContext(_serviceProvider, optionsBuilder.Options))
                     {
-                        context.Database.EnsureDeleted();
-                        context.Database.EnsureCreated();
-                    }
-                });
+                        var optionsBuilder = new DbContextOptionsBuilder();
+                        optionsBuilder.UseSqlite(SqliteTestStore.CreateConnectionString(DatabaseName));
+
+                        using (var context = new StoreGeneratedContext(_serviceProvider, optionsBuilder.Options))
+                        {
+                            context.Database.EnsureDeleted();
+                            context.Database.EnsureCreated();
+                        }
+                    });
             }
 
             public override DbContext CreateContext(SqliteTestStore testStore)
@@ -63,31 +62,25 @@ namespace Microsoft.Data.Entity.Sqlite.FunctionalTests
                 base.OnModelCreating(modelBuilder);
 
                 modelBuilder.Entity<Gumball>(b =>
-                {
-                    b.Property(e => e.Identity)
-                        .ForRelational()
-                        .DefaultValue("Banana Joe");
+                    {
+                        b.Property(e => e.Identity)
+                            .DefaultValue("Banana Joe");
 
-                    b.Property(e => e.IdentityReadOnlyBeforeSave)
-                        .ForRelational()
-                        .DefaultValue("Doughnut Sheriff");
+                        b.Property(e => e.IdentityReadOnlyBeforeSave)
+                            .DefaultValue("Doughnut Sheriff");
 
-                    b.Property(e => e.IdentityReadOnlyAfterSave)
-                        .ForRelational()
-                        .DefaultValue("Anton");
+                        b.Property(e => e.IdentityReadOnlyAfterSave)
+                            .DefaultValue("Anton");
 
-                    b.Property(e => e.Computed)
-                        .ForRelational()
-                        .DefaultValue("Alan");
+                        b.Property(e => e.Computed)
+                            .DefaultValue("Alan");
 
-                    b.Property(e => e.ComputedReadOnlyBeforeSave)
-                        .ForRelational()
-                        .DefaultValue("Carmen");
+                        b.Property(e => e.ComputedReadOnlyBeforeSave)
+                            .DefaultValue("Carmen");
 
-                    b.Property(e => e.ComputedReadOnlyAfterSave)
-                        .ForRelational()
-                        .DefaultValue("Tina Rex");
-                });
+                        b.Property(e => e.ComputedReadOnlyAfterSave)
+                            .DefaultValue("Tina Rex");
+                    });
             }
         }
     }

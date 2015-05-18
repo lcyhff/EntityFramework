@@ -32,22 +32,22 @@ namespace Microsoft.Data.Entity.Sqlite.FunctionalTests
         public override SqliteTestStore CreateTestStore()
         {
             return SqliteTestStore.GetOrCreateShared(DatabaseName, () =>
-            {
-                var optionsBuilder = new DbContextOptionsBuilder();
-                optionsBuilder.UseSqlite(_connectionString);
-
-                using (var context = new F1Context(_serviceProvider, optionsBuilder.Options))
                 {
-                    // TODO: Delete DB if model changed
-                    context.Database.EnsureDeleted();
-                    if (context.Database.EnsureCreated())
-                    {
-                        ConcurrencyModelInitializer.Seed(context);
-                    }
+                    var optionsBuilder = new DbContextOptionsBuilder();
+                    optionsBuilder.UseSqlite(_connectionString);
 
-                    TestSqlLoggerFactory.SqlStatements.Clear();
-                }
-            });
+                    using (var context = new F1Context(_serviceProvider, optionsBuilder.Options))
+                    {
+                        // TODO: Delete DB if model changed
+                        context.Database.EnsureDeleted();
+                        if (context.Database.EnsureCreated())
+                        {
+                            ConcurrencyModelInitializer.Seed(context);
+                        }
+
+                        TestSqlLoggerFactory.SqlStatements.Clear();
+                    }
+                });
         }
 
         public override F1Context CreateContext(SqliteTestStore testStore)

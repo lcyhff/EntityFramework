@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved.
+﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -33,22 +33,22 @@ namespace Microsoft.Data.Entity.Sqlite.FunctionalTests
         public override SqliteTestStore CreateTestStore()
         {
             return SqliteTestStore.GetOrCreateShared(DatabaseName, () =>
-            {
-                var optionsBuilder = new DbContextOptionsBuilder();
-                optionsBuilder.UseSqlite(_connectionString);
-
-                using (var context = new NullSemanticsContext(_serviceProvider, optionsBuilder.Options))
                 {
-                    // TODO: Delete DB if model changed
+                    var optionsBuilder = new DbContextOptionsBuilder();
+                    optionsBuilder.UseSqlite(_connectionString);
 
-                    if (context.Database.EnsureCreated())
+                    using (var context = new NullSemanticsContext(_serviceProvider, optionsBuilder.Options))
                     {
-                        NullSemanticsModelInitializer.Seed(context);
-                    }
+                        // TODO: Delete DB if model changed
 
-                    TestSqlLoggerFactory.SqlStatements.Clear();
-                }
-            });
+                        if (context.Database.EnsureCreated())
+                        {
+                            NullSemanticsModelInitializer.Seed(context);
+                        }
+
+                        TestSqlLoggerFactory.SqlStatements.Clear();
+                    }
+                });
         }
 
         public override NullSemanticsContext CreateContext(SqliteTestStore testStore)

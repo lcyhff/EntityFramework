@@ -1,10 +1,9 @@
-﻿// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved.
+﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
 using Microsoft.Data.Entity.FunctionalTests;
 using Microsoft.Data.Entity.Infrastructure;
-using Microsoft.Data.Entity.Metadata.Builders;
 using Microsoft.Data.Entity.Relational.FunctionalTests;
 using Microsoft.Data.Entity.Sqlite.FunctionalTests.TestModels;
 using Microsoft.Framework.DependencyInjection;
@@ -44,15 +43,16 @@ namespace Microsoft.Data.Entity.Sqlite.FunctionalTests
             _testDatabase.Dispose();
         }
 
-        protected override void OnModelCreating(BasicModelBuilder modelBuilder)
+        protected override string DatabaseSchema { get; } = null;
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<MappingQueryTestBase.MappedCustomer>(e =>
-            {
-                // TODO: Use .Sqlite() when available
-                e.Property(c => c.CompanyName2).Metadata.Relational().Column = "CompanyName";
-                e.Metadata.Relational().Table = "Customers";
-                e.Metadata.Relational().Schema = "dbo";
-            });
+                {
+                    // TODO: Use .Sqlite() when available
+                    e.Property(c => c.CompanyName2).Metadata.Relational().Column = "CompanyName";
+                    e.Metadata.Relational().Table = "Customers";
+                });
         }
     }
 }
