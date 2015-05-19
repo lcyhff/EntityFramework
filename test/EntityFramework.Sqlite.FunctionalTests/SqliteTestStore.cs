@@ -12,13 +12,19 @@ namespace Microsoft.Data.Entity.Sqlite.FunctionalTests
 {
     public class SqliteTestStore : RelationalTestStore
     {
-        private static int _scratchCount;
+        private static int _scratchCount = -1;
 
         public static SqliteTestStore GetOrCreateShared(string name, Action initializeDatabase) =>
             new SqliteTestStore(name).CreateShared(initializeDatabase);
 
-        public static SqliteTestStore CreateScratch() =>
-            new SqliteTestStore("scratch-" + Interlocked.Increment(ref _scratchCount)).CreateTransient();
+        public static SqliteTestStore CreateScratch()
+        {
+            // Creates unique scratch DB that should not overlap with previously failing tests
+            var uniqueTimestamp = DateTime.Now.ToUniversalTime() - new DateTime(2015, 1, 1, 0, 0, 0, 0);
+            var startScratchCounter = Convert.ToInt32(uniqueTimestamp.TotalSeconds);
+            Interlocked.CompareExchange(ref _scratchCount, startScratchCounter, -1);
+            return new SqliteTestStore("scratch-" + Interlocked.Increment(ref _scratchCount)).CreateTransient();
+        }
 
         private SqliteConnection _connection;
         private SqliteTransaction _transaction;
